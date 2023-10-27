@@ -12,7 +12,7 @@ struct MyPrompt {}
 
 impl Prompt for MyPrompt {
     fn render_prompt_left(&self) -> Cow<str> {
-        Cow::Borrowed("〉")
+        Cow::Borrowed("ai(ctrl+c)〉")
     }
 
     fn render_prompt_right(&self) -> Cow<str> {

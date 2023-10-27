@@ -148,7 +148,7 @@ async fn start_chat_loop(
 
 #[tokio::main]
 async fn main() {
-    let _ = Args::parse();
+    let my_args = Args::parse();
 
     dotenv().ok();
     let api_key = match env::var("API_KEY") {
@@ -156,7 +156,7 @@ async fn main() {
         Err(_) => panic!("API_KEY must be set, create a .env file and set API_KEY=<your_key>"),
     };
 
-    let context_mode = match env::var("CONTEXT") {
+    let mut context_mode = match env::var("CONTEXT") {
         Ok(value) => {
             if value == String::from("true") {
                 true
@@ -168,8 +168,11 @@ async fn main() {
         }
         Err(_) => false,
     };
+    if my_args.context {
+        context_mode = true;
+    }
 
-    let store_messages = match env::var("HISTORY") {
+    let mut store_messages = match env::var("HISTORY") {
         Ok(value) => {
             if value == String::from("true") {
                 true
@@ -181,6 +184,9 @@ async fn main() {
         }
         Err(_) => false,
     };
+    if my_args.history {
+        store_messages = true;
+    }
 
     let model = match env::var("MODEL") {
         Ok(value) => match &value[..] {
